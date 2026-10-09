@@ -25,6 +25,19 @@ describe('CrListComponent', () => {
 		expect(fixture.nativeElement.querySelectorAll('.cr-list__row').length).toBe(3); // org-alpha: CR-1, CR-2, CR-3
 	});
 
+	it('filters change requests by status', async () => {
+	const fixture = await render(users.approver);
+	const component = fixture.componentInstance;
+
+	component.onFilterChange('DRAFT');
+	fixture.detectChanges();
+
+	const rows = fixture.nativeElement.querySelectorAll('.cr-list__row');
+
+	expect(rows.length).toBe(1);
+	expect(rows[0].textContent).toContain('CR-3');
+});
+
 	it('shows the empty state when the org has no change requests', async () => {
 		const fixture = await render({ id: 'x', orgCode: 'org-empty', policies: ['cr_r_o'] });
 		expect(fixture.nativeElement.querySelector('.cr-list__empty')).not.toBeNull();
